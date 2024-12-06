@@ -1,19 +1,21 @@
-import {addFileNameSuffix, getQueryParams, imageHeaders} from "./utils.ts"
+type QueryParamsType = { [key: string]: string }
 
-export const sendResponse = async (request: Request): Promise<Response> => {
-    const queryParams = getQueryParams(request)
-    const outputFileName = `${addFileNameSuffix(queryParams.image_name)(queryParams.smoothing_type)}`
-    const image = await Deno.readFile(`./render_image/${outputFileName}`)
-    await Deno.remove(`./render_image/${outputFileName}`)
-    const headers = new Headers(imageHeaders)
-    headers.set("Content-Disposition", `inline; filename="${outputFileName}"`);
-    return new Response(image, {
-        status: 200,
-        headers: headers
-    })
+const textHtmlHeaders = new Headers({"Content-Type": "text/html"})
+const imageHeaders = new Headers({"Content-Type": "image/*"})
+
+const getQueryParams = (request: Request): QueryParamsType => {
+    const url = new URL(request.url)
+    const queryParams = url.searchParams
+    const args: QueryParamsType = {}
+    queryParams.forEach((value, key) => args[key] = value)
+    console.log("ARGS: ", args)
+    return args
 }
 
-export const sendResponse2 = (location: string) => async (req: Request): Promise<Response> => {
+export const sendManualResponse = (code: number, error: string,) => 
+    () => new Response(JSON.stringify({messagee: error}), { status: code, headers: textHtmlHeaders })
+
+export const sendResponse = (location: string) => async (req: Request): Promise<Response> => {
         //get image from req
         const formData = await req.formData();
         const file = <File>formData.get("image");

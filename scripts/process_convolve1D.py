@@ -1,27 +1,26 @@
-import cv2
-import numpy as np
-import time
 import sys
-from imports.kernels import Kernel_1d
-from imports.utils import get_image, get_shape_output_valid, add_filename_suffix, get_image_name_path
+import time
+import numpy as np
+from imports.kernels import Kernel1d
 from imports.query_params import QueryParamsConvolution
+from imports.utils import get_image_from_stdin, set_stdout, get_shape_output, get_no_channels
 
-def do_conv(kern):
-    return lambda dimension: np.convolve(dimension, kern, mode='valid')
+
+def do_conv(kern, mode: str):
+    return lambda dimension: np.convolve(dimension, kern, mode=mode)
+
+query_params = QueryParamsConvolution(sys.argv)
+image = get_image_from_stdin()
 
 start_time = time.time()
-query_params = QueryParamsConvolution(sys.argv)
-image_name_path = get_image_name_path(query_params.image_name)
-image = get_image(image_name_path)
-kernel_1d = Kernel_1d.get_kernel_1d(query_params.kernel_type, query_params.kernel_size)
-image_blur = get_shape_output_valid(image, query_params.kernel_size, image.shape[2])
-for channel in range(image.shape[2]):
-    first_convolution = np.apply_along_axis(do_conv(kernel_1d[0]), axis=0, arr=image[:,:,channel])
-    image_blur[:,:,channel] = np.apply_along_axis(do_conv(kernel_1d[1]), axis=1, arr=first_convolution)
+kernel_1d = Kernel1d.get_kernel_1d(query_params.smoothing_type, query_params.kernel_size)
+no_channels = get_no_channels(image.shape)
+image_blur = get_shape_output(query_params.convolution_mode)(image.shape, query_params.kernel_size, no_channels)
+for channel in range(no_channels):
+    first_convolution = np.apply_along_axis(do_conv(kernel_1d[0], query_params.convolution_mode.value), axis=0, arr=image[:,:,channel])
+    image_blur[:,:,channel] = np.apply_along_axis(do_conv(kernel_1d[1], query_params.convolution_mode.value), axis=1, arr=first_convolution)
 end_time = time.time()
 
-# write processed file
-cv2.imwrite(add_filename_suffix(image_name_path, query_params.kernel_type), image_blur)
-
-print(f"Time taken for convolution with a box filter using np.convolve is {end_time - start_time:.4f} seconds")
-print(f"Received arguments: {sys.argv}")
+time_taken = end_time - start_time
+set_stdout(image_blur, query_params.image_name)
+print(f"Time taken for convolution with a box filter using np.convolve is {time_taken:.4f} seconds")

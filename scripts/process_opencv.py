@@ -1,21 +1,16 @@
-import cv2
-import time
 import sys
+import time
 from imports.query_params import QueryParamsOpenCv
-from imports.utils import get_cv_function
-from imports.image import get_image, get_image_name_path, add_image_name_path_suffix
+from imports.utils import get_image_from_stdin, set_stdout, get_cv_function
 
 
 query_params = QueryParamsOpenCv(sys.argv)
-print("TESTT: ")
-image_name_path = get_image_name_path(query_params.image_name)
-image = get_image(image_name_path)
+image = get_image_from_stdin()
 
 start_time = time.time()
 image_blur = get_cv_function(image, query_params.smoothing_type, query_params.kernel_size)
 end_time = time.time()
 
-# write processed file
-cv2.imwrite(add_image_name_path_suffix(image_name_path, query_params.smoothing_type), image_blur)
-
-print(f"Time taken for {query_params.smoothing_type} using cv2.blur is {end_time - start_time:.4f} seconds")
+time_taken = end_time - start_time
+set_stdout(image_blur, query_params.image_name)
+print(f"Time taken for {query_params.smoothing_type} using cv2.blur is {time_taken:.4f} seconds")

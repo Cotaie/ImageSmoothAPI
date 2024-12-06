@@ -55,5 +55,5 @@ def set_stdout(image, image_name):
     #sys.stdout.write(f"{TIME_TAKEN_STRING}: {time_taken:.6f}\n")
     sys.stdout.buffer.write(encoded_image)
 
-def get_no_channels(shape: tuple):
+def get_no_channels(shape: tuple) -> int:
     return 1 if shape[2] is None else shape[2]
