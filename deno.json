@@ -1,0 +1,19 @@
+{
+    "imports": {
+        "emit": "https://deno.land/x/emit@0.40.0/mod.ts",
+        "path": "https://deno.land/std@0.192.0/path/mod.ts"
+    },
+    "compilerOptions": {
+      "lib": [
+        "dom",
+        "esnext",
+        "deno.ns"
+      ],
+      "strict": true
+    },
+    "tasks": {
+      "bundle": "deno run --allow-all bundle.ts",
+      "run": "deno run --allow-all mod.ts",
+      "all": "deno task bundle && deno task run"
+    }
+}
