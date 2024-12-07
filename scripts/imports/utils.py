@@ -1,11 +1,10 @@
-import numpy as np
-import cv2
-import math
-import sys
 import os
-
-from imports.types_enum import ConvolutionMode, SmoothingType
+import cv2
+import sys
+import numpy as np
 from imports.kernels import STD_RATIO_KERNEL
+from imports.types_enum import ConvolutionMode
+
 
 TIME_TAKEN_STRING = "Time-Taken"
 
@@ -21,17 +20,6 @@ def get_shape_output(mode: ConvolutionMode):
             case _:
                 raise ValueError(f"Unsupported mode type: '{mode}'")
     return _inner
-
-def get_cv_function(image, smoothing_type: SmoothingType, kernel_size: int):
-    match smoothing_type:
-        case SmoothingType.BOX_BLUR:
-            return cv2.blur(image, (kernel_size,kernel_size))
-        case SmoothingType.GAUSSIAN_BLUR:
-            return cv2.GaussianBlur(src=image, ksize=(kernel_size,kernel_size), sigmaX=kernel_size/(2*math.pi), sigmaY=kernel_size/(2*math.pi))
-        case SmoothingType.MEDIAN_BLUR:
-            return cv2.medianBlur(image, kernel_size)
-        case _:
-            raise ValueError(f"Unsupported kernel type: '{smoothing_type}'")
         
 def get_default_kernel_value(shape):
     return round(min(shape[0], shape[1]) * STD_RATIO_KERNEL)
