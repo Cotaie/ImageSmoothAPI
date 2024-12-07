@@ -2,7 +2,7 @@ import sys
 import time
 import numpy as np
 from imports.kernels import Kernel1d
-from imports.query_params import QueryParamsConvolution
+from imports.types import QueryParamsConvolution
 from imports.utils import get_image_from_stdin, set_stdout, get_shape_output, get_no_channels
 
 

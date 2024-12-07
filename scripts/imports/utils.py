@@ -3,7 +3,7 @@ import cv2
 import sys
 import numpy as np
 from imports.kernels import STD_RATIO_KERNEL
-from imports.types_enum import ConvolutionMode
+from imports.types import ConvolutionMode
 
 
 TIME_TAKEN_STRING = "Time-Taken"

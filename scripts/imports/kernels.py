@@ -1,9 +1,9 @@
 import numpy as np
 import math
-from imports.types_enum import SmoothingType
+from imports.types import SmoothingType
+
 
 STD_RATIO_KERNEL = 0.01
-
 
 class Kernel1d:
     @staticmethod

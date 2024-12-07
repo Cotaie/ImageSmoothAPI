@@ -3,7 +3,7 @@ import time
 import numpy as np
 import scipy.signal as sig
 from imports.kernels import Kernel2d
-from imports.query_params import QueryParamsConvolution
+from imports.types import QueryParamsConvolution
 from imports.utils import get_image_from_stdin, get_no_channels, get_shape_output, set_stdout
 
 
