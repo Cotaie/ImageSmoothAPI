@@ -1,6 +1,10 @@
 from enum import Enum
 
 
+class ConvolutionType(Enum):
+    ONE_D = 0
+    TWO_D = 1
+
 class ConvolutionMode(Enum):
     VALID = 'valid'
     SAME = 'same'
@@ -24,7 +28,7 @@ class SmoothingType(Enum):
             raise ValueError(f"Invalid smoothing type: {smoothing_type}")
         
 class QueryParams:
-    def __init__(self, args):
+    def __init__(self, args: list):
         self.location = args[0]
         self.image_name = args[1]
         self.smoothing_type = SmoothingType.from_string(args[2])

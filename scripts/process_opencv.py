@@ -2,7 +2,7 @@ import cv2
 import sys
 import math
 import time
-from imports.types import SmoothingType, QueryParamsOpenCv
+from imports.imports import SmoothingType, QueryParamsOpenCv
 from imports.utils import get_image_from_stdin, set_stdout
 
 

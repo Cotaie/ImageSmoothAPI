@@ -1,8 +1,8 @@
 import sys
 import time
 import numpy as np
-from imports.kernels import Kernel1d
-from imports.types import QueryParamsConvolution
+from imports.kernels import Kernel
+from imports.imports import QueryParamsConvolution, ConvolutionType
 from imports.utils import get_image_from_stdin, set_stdout, get_shape_output, get_no_channels
 
 
@@ -13,12 +13,12 @@ query_params = QueryParamsConvolution(sys.argv)
 image = get_image_from_stdin()
 
 start_time = time.time()
-kernel_1d = Kernel1d.get_kernel_1d(query_params.smoothing_type, query_params.kernel_size)
+kernel_1d = Kernel.get_kernel(query_params.smoothing_type, ConvolutionType.ONE_D, query_params.kernel_size)
 no_channels = get_no_channels(image.shape)
 image_blur = get_shape_output(query_params.convolution_mode)(image.shape, query_params.kernel_size, no_channels)
 for channel in range(no_channels):
-    first_convolution = np.apply_along_axis(do_conv(kernel_1d[0], query_params.convolution_mode.value), axis=0, arr=image[:,:,channel])
-    image_blur[:,:,channel] = np.apply_along_axis(do_conv(kernel_1d[1], query_params.convolution_mode.value), axis=1, arr=first_convolution)
+    first_convolution = np.apply_along_axis(do_conv(kernel_1d, query_params.convolution_mode.value), axis=0, arr=image[:,:,channel])
+    image_blur[:,:,channel] = np.apply_along_axis(do_conv(kernel_1d, query_params.convolution_mode.value), axis=1, arr=first_convolution)
 end_time = time.time()
 
 time_taken = end_time - start_time

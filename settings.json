@@ -1,5 +1,6 @@
 {
     "deno.config": "./deno.json",
     "deno.enable": true,
-    "deno.lint": true
+    "deno.lint": true,
+    "python.analysis.typeCheckingMode": "strict"
 }
