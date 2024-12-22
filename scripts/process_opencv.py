@@ -2,11 +2,12 @@ import cv2
 import sys
 import math
 import time
+import numpy as np
 from imports.imports import SmoothingType, QueryParamsOpenCv
 from imports.utils import get_image_from_stdin, set_stdout
 
 
-def get_smoothing_result(image, smoothing_type: SmoothingType, kernel_size: int):
+def get_smoothing_result(image: np.ndarray, smoothing_type: SmoothingType, kernel_size: int) -> np.ndarray:
     match smoothing_type:
         case SmoothingType.BOX_BLUR:
             return cv2.blur(image, (kernel_size,kernel_size))
@@ -15,7 +16,7 @@ def get_smoothing_result(image, smoothing_type: SmoothingType, kernel_size: int)
         case SmoothingType.MEDIAN_BLUR:
             return cv2.medianBlur(image, kernel_size)
         case _:
-            raise ValueError(f"Unsupported kernel type: '{smoothing_type}'")
+            raise ValueError(f"Unsupported smoothing type: '{smoothing_type}'")
 
 query_params = QueryParamsOpenCv(sys.argv)
 image = get_image_from_stdin()
