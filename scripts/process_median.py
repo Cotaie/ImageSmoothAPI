@@ -31,6 +31,11 @@ match image_type:
                     case MedianType.STANDARD:
                         histogram = Median.get_histogram(submatrix)
                         image_blur[i,j] = Median.get_median_value(histogram)
+    case ImageType.RGB:
+        pass
+    case _:
+        raise ValueError(f"Unsupported image type: '{image_type}'")
+    
 
 
 
